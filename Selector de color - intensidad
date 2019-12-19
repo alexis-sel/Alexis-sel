@@ -1,0 +1,59 @@
+// instagram: @Technology_artss, Personal: @Alexis_sel35
+// Arduino UNO. 
+
+boolean Estado; // Variable que almacena el estado del pin INPUT (4)
+int contador = 0;
+int potenciometro;
+
+void setup() {
+  // Declarando las salidas 
+  pinMode (4,INPUT); // Entrada de datos del boton.
+  pinMode (3,OUTPUT); // LED - ROJO
+  pinMode (5,OUTPUT); // LED - VERDE
+  pinMode (6,OUTPUT); // LED - AZUL
+}
+
+void loop() {
+ Estado = digitalRead (4); // Lee la posición de estado del boton
+ if (Estado == false){ // Si el boton está precionado...  
+  contador +=1; // Cambia el color del led RGB
+  delay (300);
+ }
+ potenciometro = analogRead (A0); // Lee los valores analogicos del potenciometro 
+ potenciometro = map (potenciometro, 0, 1023, 0, 255); // Los convierte en nuevos valores para el PWM
+ 
+ switch (contador){ // Lee el estado de la variable contador y la compara para encender un color
+  case 0:
+  digitalWrite (3, HIGH); digitalWrite (5, HIGH); digitalWrite (6, HIGH); // APAGA TODOS LOS COLORES
+  break;
+  case 1:
+  analogWrite (3, potenciometro); // Enciende el color...
+  break;
+  case 2:
+  digitalWrite (3, HIGH);
+  analogWrite (5, potenciometro); 
+  break;
+  case 3:
+  digitalWrite (5, HIGH);
+  analogWrite (6, potenciometro); 
+  break;
+  case 4:
+  digitalWrite (6, HIGH);
+  analogWrite (3, (potenciometro - 30)); 
+  analogWrite (5, (potenciometro - 30));
+  break;
+  case 5:
+  digitalWrite (5, HIGH);
+  analogWrite (3, (potenciometro - 30)); 
+  analogWrite (6, (potenciometro - 30));
+  break;
+  case 6:
+  analogWrite (5, (potenciometro - 30));
+  analogWrite (3, (potenciometro - 30)); 
+  analogWrite (6, (potenciometro - 30));
+  break;
+  
+  case 7:
+  contador = 0;
+ }
+}
